@@ -27,6 +27,7 @@ tipo_alunos * realocaVetor(tipo_alunos * vetor ,int novotam){
 
 // Q3
 
+void
 
 
 // Q4 -> n1       pode ter mais de um parâmetro?
