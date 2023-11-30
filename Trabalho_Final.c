@@ -27,48 +27,91 @@ tipo_alunos * realocaVetor(tipo_alunos * vetor ,int novotam){
 
 // Q3
 
-void
+void cadastraAlunos(tipo_alunos * alunos, int pos){
+
+    printf("Nome: \n");
+    setbuf(stdin, NULL);
+    fgets(alunos[pos].nome, 80, stdin);
+    printf("R.A.:\n");
+    scanf("%d", &alunos[pos].ra);
+    printf("n1:\n");
+    scanf("%f", &alunos[pos].n1);
+    printf("n2:\n");
+    scanf("%f", &alunos[pos].n2);
+    printf("n3:\n");
+    scanf("%f", &alunos[pos].n3);
+    alunos[pos].media = (alunos[pos].n1 + alunos[pos].n2 + alunos[pos].n3) / 3 ;
 
 
-// Q4 -> n1       pode ter mais de um parâmetro?
-float encontraMaior( int tam, tipo_alunos alunos[tam]){
+}
+
+// Q4 -> n1       pode ter mais de um parâmetro? SIM!
+void encontraMaior( int tam, tipo_alunos alunos[tam]){
 
     float maiorNota = 0;
+    int ramaior;
 
     for (int i = 0; i < tam; i++)
     {
         if (alunos[i].n1 > maiorNota)
         {
             maiorNota = alunos[i].n1;
+            ramaior = alunos[i].ra;
         }
         
     }
     
+    printf("O aluno com a maior nota foi %d, sendo %.2f\n", ramaior, maiorNota);
 
-    return maiorNota;
 } 
 
 // Q5 -> media geral
-int encontraMenor( int tam, tipo_alunos * alunos){
+void encontraMenor( int tam, tipo_alunos * alunos){
 
     float menorMedia;
+    int ramenor;
 
     for (int i = 0; i < tam; i++)
     {
         if (alunos[i].media < menorMedia || i == 1 )
         {
             menorMedia = alunos[i].media;
+            ramenor = alunos[i].ra;
         }
         
     }
 
-    return menorMedia;
+    printf("O aluno com menor media foi %d, sendo %.2f\n", ramenor, menorMedia);
     
 } 
 
 //Q6
 
-int verificaAprovacao(){
+void verificaAprovacao(tipo_alunos * alunos, int procurado, int tam){
+
+
+    if (procurado == 1)
+    {
+        for (int i = 0; i < tam; i++)
+        {
+            if (alunos[i].media >=6)
+            {
+                printf("%d APROVADO !\n", alunos[i].ra);
+            }
+            
+        }
+    }
+    if (procurado == 2)
+    {
+        for (int i = 0; i < tam; i++)
+        {
+            if (alunos[i].media < 6)
+            {
+                printf("%d REPROVADO !\n", alunos[i].ra);
+            }
+            
+        }
+    }
 
 }
 
@@ -114,7 +157,9 @@ void porcentagemAproveitamento(tipo_alunos * alunos, int tam){
 
 }
 
-void preencheVetor(tipo_alunos * alu,int tam)
+/////////////// Uso em testes
+
+/*void preencheVetor(tipo_alunos * alu,int tam)
 {
     for (int i = 0; i < tam; i++)
     {
@@ -127,22 +172,82 @@ void preencheVetor(tipo_alunos * alu,int tam)
     }
 
 }
+*/
 ////////////////////// MAIN
 int main(){
 
 //A alocação inicial do vetor de alunos deve conter dimensão máxima 10
-    tipo_alunos alu[10];
+    tipo_alunos *alu = (tipo_alunos*) calloc(5, sizeof(tipo_alunos));
+
+    int tam = 0;
+    int menu=10;
+    int aprov;
 
     alocaVetor(5);
-    realocaVetor(alu, 10);
-    preencheVetor(alu, 10);
-    imprimeVetor(10, alu);
-    porcentagemAproveitamento(alu, 10);
 
+    do{
 
+        printf("1- Alocar Vetor\n2- Realocar Vetor\n3- Cadastrar Alunos\n4- Checar maior nota\n5- Checar menor media\n6- Verificar Aprovacoes\n7- Mostrar todos os alunos\n8- Analisar performance\n0- SAIR\n");
+        scanf("%d", &menu);
 
+        switch (menu)
+        {
+        case 1:
 
+            printf("Tamanho:\n");
+            scanf("%d", &tam);
+            alu = alocaVetor(tam);
+            break;
+        
+        case 2:
 
+            printf("Tamanho:\n");
+            scanf("%d", &tam);
+            alu = realocaVetor(alu, tam);
+            break;
+
+        case 3:
+        
+            for (int i = 0; i < tam; i++)
+            {
+                cadastraAlunos(alu, i);
+            }
+            break;
+
+        case 4:
+
+            encontraMaior(tam, alu);
+            break;
+
+        case 5:
+
+            encontraMenor(tam, alu);
+            break;
+
+        case 6:
+
+            printf("1- procurar aprovados\n2- procurar reprovados\n");
+            scanf("%d", &aprov);
+
+            verificaAprovacao(alu, aprov, tam);
+            break;
+
+        case 7:
+
+            imprimeVetor(tam, alu);
+            break;
+            
+        case 8:
+
+            porcentagemAproveitamento(alu, tam);
+            break;
+
+        default:
+            break;
+        }
+
+    }while (menu != 0);
+    
 
     return 0;
 }
